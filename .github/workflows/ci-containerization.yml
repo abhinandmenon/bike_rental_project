@@ -65,8 +65,11 @@ jobs:
           username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - name: Set up Docker Buildx
+        uses: docker/build-buildx-action@v3
+
       - name: Push the container image to Docker Hub
         uses: docker/build-push-action@v6
         with:
           push: true
-          tags: user/bike_rental_api:latest
+          tags: ${{ vars.DOCKERHUB_USERNAME }}/bike_rental_api:latest
