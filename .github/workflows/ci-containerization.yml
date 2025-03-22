@@ -10,21 +10,19 @@ on:
   workflow_dispatch:
 
 jobs:
-  train-test-package:
+  train-test-build-package:
     runs-on: ubuntu-latest
     strategy:
       fail-fast:  false
-      matrix:
-        python-version: ["3.9", "3.10", "3.11", "3.12"]
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set up Python ${{ matrix.python-version }}
+      - name: Set up Python 3.12
         uses: actions/setup-python@v5
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: "3.12"
 
       - name: Install Dependencies
         run: |
@@ -61,10 +59,6 @@ jobs:
         run: |
           pytest bike_rental_api/
 
-      - name: Build the container image
-        run: |
-          docker build -t bike_rental_api .
-
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
@@ -72,5 +66,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Push the container image to Docker Hub
-        run: |
-          docker push ${{ vars.DOCKERHUB_USERNAME }}/bike_rental_api
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          tags: user/bike_rental_api:latest
