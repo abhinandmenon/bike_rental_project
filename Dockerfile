@@ -11,19 +11,8 @@ ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 # Copy required files
 COPY bike_rental_api/ /bike_rental_api/
-COPY bike_rental_model/ /bike_rental_model/
-COPY requirements/ /requirements/
-COPY MANIFEST.in pyproject.toml setup.py .
 
-# Install packages for bike_rental_model
-RUN pip install --no-cache-dir -r requirements/requirements.txt
-
-# Build the bike_rental_model package
-RUN pip install --upgrade build
-RUN python3 -m build
-RUN cp dist/*.whl bike_rental_api/
-
-# Install packages for bike_rental_api
+# Install dependencies for bike_rental_api
 RUN pip install --no-cache-dir -r bike_rental_api/requirements.txt
 RUN pip install bike_rental_api/*.whl
 
