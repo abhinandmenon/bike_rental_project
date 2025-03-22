@@ -1,13 +1,5 @@
-# Use an official Ubuntu base image
-FROM ubuntu:latest
-
-# Install Python and pip
-RUN apt-get update && apt-get install -y python3 python3-pip python3-venv
-
-# Setup venv
-ENV VIRTUAL_ENV=/venv
-RUN python3 -m venv $VIRTUAL_ENV
-ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+# Use an official Docker Python 3.12 base image
+FROM python:3.12
 
 # Copy required files
 COPY bike_rental_api/ /bike_rental_api/
